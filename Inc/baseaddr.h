@@ -59,5 +59,8 @@
 #define RCC_BASE                    	(AHB1PERIPH_BASE + 0x3800)
 
 
+#define EXTI_BASE						(APB2PERIPH_BASE + 0x3C00)
+#define SYSCFG_BASE	        			(APB2PERIPH_BASE + 0x3800)
+#define NVIC_PR_BASE				 	((_vu32*)0xE000E400)
 
 #endif /* BASEADDR_H_ */
