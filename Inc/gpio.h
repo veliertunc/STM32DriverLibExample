@@ -151,13 +151,11 @@ void GPIO_WritePort(GPIO_RegDef_t* pGPIOx, uint32_t value);
  * @param pGPIOx: The pointer to the port
  * @param pin: The pin to toggle.
  */
-void GPIO_TogglePin(GPIO_RegDef_t* pGPIOx, uint8_t pin);
+void GPIO_Toggle(GPIO_RegDef_t* pGPIOx, uint8_t pin);
 
 /*
- * IRQ Configuration and ISR handling
+ * ISR handling
  */
-void GPIO_ConfigureInterrupt(uint8_t irqNo, uint8_t enabled);
-void GPIO_SetIRQPriority(uint8_t irqNo, uint32_t priority);
 void GPIO_HandleIRQ(uint8_t pin);
 
 #endif /* GPIO_H_ */

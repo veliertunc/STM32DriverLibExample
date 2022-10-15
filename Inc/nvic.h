@@ -31,4 +31,11 @@
  */
 #define NO_PR_BITS_IMPLEMENTED  	4
 
+/*
+ * IRQ Configuration and ISR handling
+ */
+void NVIC_EnableIRQ(uint8_t irqNo);
+void NVIC_DisableIRQ(uint8_t irqNo);
+void NVIC_SetPriority(uint8_t irqNo, uint32_t priority);
+
 #endif /* NVIC_H_ */
