@@ -8,11 +8,48 @@
 #ifndef GPIO_H_
 #define GPIO_H_
 
-#include "types.h"
 #include "baseaddr.h"
 #include "exti.h"
 #include "syscfg.h"
 #include "nvic.h"
+#include "rcc.h"
+
+typedef volatile struct
+{
+	uint32_t MODER;                         /* Port mode register,          	          	Address offset: 0x00      */
+	uint32_t OTYPER;                        /* Output type register,     					Address offset: 0x04      */
+	uint32_t OSPEEDR;					    /* Output speed register,     					Address offset: 0x08      */
+	uint32_t PUPDR;						    /* Output pull up/down register,				Address offset: 0x0C      */
+	uint32_t IDR;						    /* Input data register,     					Address offset: 0x10      */
+	uint32_t ODR;						    /* Output data register,     					Address offset: 0x04      */
+	uint32_t BSRR;							/* Bit set/reset register,     					Address offset: 0x04      */
+	uint32_t LCKR;							/* Configuration lock register,     			Address offset: 0x04      */
+	uint32_t AFR[2];					 	/* AFR[0] : GPIO alternate function low register, AFR[1] : GPIO alternate function high register    		Address offset: 0x20-0x24 */
+}GPIO_RegDef_t;
+
+/*
+ * The structure used to configure a pin
+ */
+typedef struct
+{
+	uint8_t PinNo;
+	uint8_t Mode;			/* Possible values from @GPIO_PIN_MODES >*/
+	uint8_t Speed;			/* Possible values from @GPIO_PIN_SPEED >*/
+	uint8_t Pull;
+	uint8_t OutputType;
+	uint8_t AltFunMode;
+}GPIO_PinConfig_t;
+
+/*
+ * The handle structure for a pin
+ */
+typedef struct
+{
+	GPIO_RegDef_t *pGPIOx;       		/* Holds the base address of the GPIO port to which the pin belongs >*/
+	GPIO_PinConfig_t config;   			/* Holds GPIO pin configuration settings >*/
+}GPIO_Handle_t;
+
+
 
 #define GPIOA  							((GPIO_RegDef_t*)GPIOA_BASE)
 #define GPIOB  							((GPIO_RegDef_t*)GPIOB_BASE)
@@ -119,8 +156,8 @@ void GPIO_TogglePin(GPIO_RegDef_t* pGPIOx, uint8_t pin);
 /*
  * IRQ Configuration and ISR handling
  */
-void GPIO_IRQInterruptConfig(uint8_t irqNo, uint8_t enabled);
-void GPIO_IRQPriorityConfig(uint8_t irqNo, uint32_t priority);
-void GPIO_IRQHandling(uint8_t pin);
+void GPIO_ConfigureInterrupt(uint8_t irqNo, uint8_t enabled);
+void GPIO_SetIRQPriority(uint8_t irqNo, uint32_t priority);
+void GPIO_HandleIRQ(uint8_t pin);
 
 #endif /* GPIO_H_ */

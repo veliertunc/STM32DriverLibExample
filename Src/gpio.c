@@ -106,7 +106,7 @@ void GPIO_TogglePin(GPIO_RegDef_t *pGPIOx, uint8_t pin) {
 	pGPIOx->ODR ^= (1U << pin);
 }
 
-void GPIO_IRQInterruptConfig(uint8_t irqNo, uint8_t enabled) {
+void GPIO_ConfigureInterrupt(uint8_t irqNo, uint8_t enabled) {
 	if (enabled) {
 		if (irqNo <= 31) {
 			//program ISER0 register
@@ -134,7 +134,7 @@ void GPIO_IRQInterruptConfig(uint8_t irqNo, uint8_t enabled) {
 	}
 }
 
-void GPIO_IRQPriorityConfig(uint8_t irqNo, uint32_t priority) {
+void GPIO_SetIRQPriority(uint8_t irqNo, uint32_t priority) {
 	uint8_t iprx = irqNo / 4;
 	uint8_t iprx_section = irqNo % 4;
 
@@ -142,7 +142,7 @@ void GPIO_IRQPriorityConfig(uint8_t irqNo, uint32_t priority) {
 	*(NVIC_PR_BASE + iprx) |= (priority << shift_amount);
 }
 
-void GPIO_IRQHandling(uint8_t pin) {
+void GPIO_HandleIRQ(uint8_t pin) {
 	//clear the exti pr register corresponding to the pin number
 	if (EXTI->PR & (1 << pin)) {
 		EXTI->PR |= (1 << pin);

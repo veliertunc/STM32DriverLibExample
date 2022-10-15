@@ -7,28 +7,19 @@
 
 #ifndef BASEADDR_H_
 #define BASEADDR_H_
-#include "types.h"
+#include <stddef.h>
+#include <stdint.h>
 
-/*
- * NVIC ISERx register Addresses
- */
-#define NVIC_ISER0          			( (_vu32*)0xE000E100 )
-#define NVIC_ISER1          			( (_vu32*)0xE000E104 )
-#define NVIC_ISER2          			( (_vu32*)0xE000E108 )
-#define NVIC_ISER3          			( (_vu32*)0xE000E10c )
+#define _vu32 volatile uint32_t
 
-/*
- * NVIC ICERx register Addresses
- */
-#define NVIC_ICER0 						((_vu32*)0XE000E180)
-#define NVIC_ICER1						((_vu32*)0XE000E184)
-#define NVIC_ICER2  					((_vu32*)0XE000E188)
-#define NVIC_ICER3						((_vu32*)0XE000E18C)
-
-/*
- * Processor Priority Register Address Calculation
- */
-#define NVIC_PR_BASE 					((_vu32*)0xE000E400)
+#define TRUE				1
+#define FALSE				0
+#define ENABLE				1
+#define DISABLE				0
+#define SET					1
+#define RESET				0
+#define HIGH				1
+#define LOW					0
 
 /*
  * Base addresses of Flash,SRAMs and ROM
@@ -62,5 +53,6 @@
 #define EXTI_BASE						(APB2PERIPH_BASE + 0x3C00)
 #define SYSCFG_BASE	        			(APB2PERIPH_BASE + 0x3800)
 #define NVIC_PR_BASE				 	((_vu32*)0xE000E400)
+
 
 #endif /* BASEADDR_H_ */
