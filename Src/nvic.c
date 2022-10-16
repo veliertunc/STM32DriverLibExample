@@ -4,6 +4,7 @@
  *  Created on: 15 Oct 2022
  *      Author: Veli Ertunç
  */
+#include "nvic.h"
 
 void NVIC_EnableIRQ(uint8_t irqNo) {
 	if (irqNo <= 31) {

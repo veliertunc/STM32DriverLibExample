@@ -126,7 +126,7 @@ void GPIO_Reset(GPIO_RegDef_t* pGPIOx);
  *	@param pin: The pin number to read
  *	@returns HIGH or LOW
  */
-uint8_t GPIO_Read(GPIO_RegDef_t* pGPIOx, uint8_t pin);
+uint32_t GPIO_Read(GPIO_RegDef_t* pGPIOx, uint8_t pin);
 
 /**Reads the port
  *  @param pGPIOx: The pointer to the port

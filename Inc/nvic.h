@@ -7,6 +7,8 @@
 
 #ifndef NVIC_H_
 #define NVIC_H_
+#include <stddef.h>
+#include <stdint.h>
 #include "baseaddr.h"
 
 /*

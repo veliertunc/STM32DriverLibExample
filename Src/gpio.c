@@ -10,7 +10,8 @@ void GPIO_SetPeripheralClock(GPIO_RegDef_t *pGPIOx, uint8_t enabled) {
 	if (enabled) {
 		RCC->AHB1ENR |= (1 << GPIO_TO_CODE(pGPIOx));
 	} else {
-		RCC->AHB1ENR &= ~(1 << GPIO_TO_CODE(pGPIOx));
+		RCC->AHB1RSTR |= (1 << GPIO_TO_CODE(pGPIOx));
+		RCC->AHB1RSTR &= ~(1 << GPIO_TO_CODE(pGPIOx));
 	}
 }
 
@@ -18,7 +19,6 @@ void GPIO_SetPeripheralClock(GPIO_RegDef_t *pGPIOx, uint8_t enabled) {
  *	@param pHandle: The handle for pin
  */
 void GPIO_Init(GPIO_Handle_t *pHandle) {
-	uint32_t temp = 0;
 	uint8_t pinNo = pHandle->config.PinNo;
 	uint8_t mode = pHandle->config.Mode;
 	uint8_t speed = pHandle->config.Speed;
@@ -51,7 +51,7 @@ void GPIO_Init(GPIO_Handle_t *pHandle) {
 		}
 
 		//2. configure the GPIO port selection in SYSCFG_EXTICR
-		uint8_t portcode = GPIO_TO_CODE(pGPIOHandle->pGPIOx);
+		uint8_t portcode = GPIO_TO_CODE(pHandle->pGPIOx);
 		SYSCFG_SetPeripheralClock(ENABLE);
 		SYSCFG->EXTICR[pinNo / 4] = portcode << ((pinNo % 4) * 4);
 
@@ -72,8 +72,8 @@ void GPIO_Init(GPIO_Handle_t *pHandle) {
 
 	if (mode == GPIO_MODE_AF) {
 		//configure the alt function registers.
-		pGPIOHandle->pGPIOx->AFR[pinNo / 8] &= ~(0xF << (4 * (pinNo % 8))); //clearing
-		pGPIOHandle->pGPIOx->AFR[pinNo / 8] |= (afMode << (4 * (pinNo % 8)));
+		pHandle->pGPIOx->AFR[pinNo / 8] &= ~(0xF << (4 * (pinNo % 8))); //clearing
+		pHandle->pGPIOx->AFR[pinNo / 8] |= (afMode << (4 * (pinNo % 8)));
 	}
 }
 

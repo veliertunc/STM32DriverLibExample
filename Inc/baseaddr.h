@@ -38,6 +38,7 @@
 #define AHB1PERIPH_BASE					0x40020000U
 #define AHB2PERIPH_BASE					0x50000000U
 
+/*Base addresses of GPIO ports*/
 #define GPIOA_BASE                   	(AHB1PERIPH_BASE + 0x0000)
 #define GPIOB_BASE                  	(AHB1PERIPH_BASE + 0x0400)
 #define GPIOC_BASE 						(AHB1PERIPH_BASE + 0x0800)
@@ -49,6 +50,10 @@
 #define GPIOI_BASE 						(AHB1PERIPH_BASE + 0x2000)
 #define RCC_BASE                    	(AHB1PERIPH_BASE + 0x3800)
 
+/*Base addresses of SPI peripherals*/
+#define SPI1_BASE						(APB2PERIPH_BASE + 0x3000)
+#define SPI2_BASE						(APB1PERIPH_BASE + 0x3800)
+#define SPI3_BASE						(APB1PERIPH_BASE + 0x3C00)
 
 #define EXTI_BASE						(APB2PERIPH_BASE + 0x3C00)
 #define SYSCFG_BASE	        			(APB2PERIPH_BASE + 0x3800)
