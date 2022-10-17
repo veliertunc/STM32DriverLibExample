@@ -115,4 +115,46 @@ void SPI_SetPeripheralClock(SPI_RegDef_t *pSPIx, uint8_t enabled);
  */
 void SPI_Init(SPI_Handle_t *pHandle);
 
+/**Sends data in buffer
+ * @param pSPIx: The pointer to the SPI peripheral
+ * @param pTxBuffer: The data to send
+ * @param len: The length of the data sent
+ * @return none
+ */
+void SPI_Send(SPI_RegDef_t* pSPIx, uint8_t* pTxBuffer, uint32_t len);
+
+/**Sends data in buffer
+ * @param pSPIx: The pointer to the SPI peripheral
+ * @param pRxBuffer: The data to receive
+ * @param len: The length of the data received
+ * @return none
+ */
+void SPI_Receive(SPI_RegDef_t* pSPIx, uint8_t* pRxBuffer, uint32_t len);
+
+
+/**Sends data in buffer
+ * @param pSPIx: The pointer to the handle
+ * @param pTxBuffer: The data to send
+ * @param len: The length of the data sent
+ * @return The state of transmission
+ */
+uint8_t SPI_SendIT(SPI_Handle_t* pHandle, uint8_t* pTxBuffer, uint32_t len);
+
+/**Receives data from buffer
+ * @param pHandle: The pointer to the handle
+ * @param pRxBuffer: The data to receive
+ * @param len: The length of the data received
+ * @return The state of reception
+ */
+uint8_t SPI_ReceiveIT(SPI_Handle_t* pHandle, uint8_t* pRxBuffer, uint32_t len);
+
+
+uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx , uint32_t flag);
+
+/*
+ * ISR handling
+ */
+void SPI_HandleIRQ(SPI_Handle_t* pHandle);
+
+
 #endif /* SPI_H_ */

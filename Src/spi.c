@@ -90,3 +90,64 @@ void SPI_Init(SPI_Handle_t *pHandle)
 	//8. Configure SS Management
 	pHandle->pSPIx->CR1 |= (ssm << SPI_CR1_SSM);
 }
+
+uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx , uint32_t flag)
+{
+	if(pSPIx->SR & flag)
+	{
+		return SET;
+	}
+	return RESET;
+}
+
+void SPI_Send(SPI_RegDef_t* pSPIx, uint8_t* pTxBuffer, uint_32_t len)
+{
+	while(Len > 0)
+	{
+		//1. wait until TXE is set
+		while(SPI_GetFlagStatus(pSPIx,SPI_TXE_FLAG)  == RESET );
+
+		//2. check the DFF bit in CR1
+		if( (pSPIx->CR1 & ( 1 << SPI_CR1_DFF) ) )
+		{
+			//16 bit DFF
+			//1. load the data in to the DR
+			pSPIx->DR =   *((uint16_t*)pTxBuffer);
+			Len--;
+			Len--;
+			(uint16_t*)pTxBuffer++;
+		}else
+		{
+			//8 bit DFF
+			pSPIx->DR =   *pTxBuffer;
+			Len--;
+			pTxBuffer++;
+		}
+	}
+}
+
+void SPI_Receive(SPI_RegDef_t* pSPIx, uint8_t* pRxBuffer, uint_32_t len)
+{
+	while(Len > 0)
+	{
+		//1. wait until RXNE is set
+		while(SPI_GetFlagStatus(pSPIx,SPI_RXNE_FLAG)  == (uint8_t)FLAG_RESET );
+
+		//2. check the DFF bit in CR1
+		if( (pSPIx->CR1 & ( 1 << SPI_CR1_DFF) ) )
+		{
+			//16 bit DFF
+			//1. load the data from DR to Rxbuffer address
+			*((uint16_t*)pRxBuffer) = pSPIx->DR ;
+			Len--;
+			Len--;
+			(uint16_t*)pRxBuffer++;
+		}else
+		{
+			//8 bit DFF
+			*(pRxBuffer) = pSPIx->DR ;
+			Len--;
+			pRxBuffer++;
+		}
+	}
+}
