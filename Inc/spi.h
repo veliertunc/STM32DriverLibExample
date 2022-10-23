@@ -58,6 +58,77 @@
 #define SPI_SR_BSY					 	7
 #define SPI_SR_FRE					 	8
 
+#define SPI_READY 					0
+#define SPI_BUSY_IN_RX 				1
+#define SPI_BUSY_IN_TX 				2
+
+/*
+ * Possible SPI Application events
+ */
+#define SPI_EVENT_TX_CMPLT   1
+#define SPI_EVENT_RX_CMPLT   2
+#define SPI_EVENT_OVR_ERR    3
+#define SPI_EVENT_CRC_ERR    4
+
+
+
+/*
+ * @SPI_Mode
+ */
+#define SPI_DEVICE_MODE_MASTER    1
+#define SPI_DEVICE_MODE_SLAVE     0
+
+
+/*
+ * @SPI_Config
+ */
+#define SPI_BUS_CONFIG_FD                1
+#define SPI_BUS_CONFIG_HD                2
+#define SPI_BUS_CONFIG_SIMPLEX_RXONLY    3
+
+/*
+ * @SPI_SclkSpeed
+ */
+#define SPI_SCLK_SPEED_DIV2             	0
+#define SPI_SCLK_SPEED_DIV4             	1
+#define SPI_SCLK_SPEED_DIV8             	2
+#define SPI_SCLK_SPEED_DIV16             	3
+#define SPI_SCLK_SPEED_DIV32             	4
+#define SPI_SCLK_SPEED_DIV64             	5
+#define SPI_SCLK_SPEED_DIV128             	6
+#define SPI_SCLK_SPEED_DIV256             	7
+
+/*
+ * @SPI_DataFormat
+ */
+#define SPI_DFF_8BITS 	0
+#define SPI_DFF_16BITS  1
+
+/*
+ * @CPOL
+ */
+#define SPI_CPOL_HIGH		 1
+#define SPI_CPOL_LOW		 0
+
+/*
+ * @CPHA
+ */
+#define SPI_CPHA_HIGH 1
+#define SPI_CPHA_LOW 0
+
+/*
+ * @SPI_SSM
+ */
+#define SPI_SSM_EN     1
+#define SPI_SSM_DI     0
+
+/*
+ * SPI related status flags definitions
+ */
+#define SPI_TXE_FLAG    ( 1 << SPI_SR_TXE)
+#define SPI_RXNE_FLAG   ( 1 << SPI_SR_RXNE)
+#define SPI_BUSY_FLAG   ( 1 << SPI_SR_BSY)
+
 /**
  * Register definition for SPI peripheral
  */
@@ -110,6 +181,12 @@ typedef struct {
  */
 void SPI_SetPeripheralClock(SPI_RegDef_t *pSPIx, uint8_t enabled);
 
+/**Enables or disables the specified peripheral
+ * @param pSPIx: The pointer to SPI peripheral
+ * @param isEnable: If ENABLE enables te peripheral, disables otherwise
+ */
+void SPI_SetPeripheral(SPI_RegDef_t* pSPIx,uint8_t isEnable);
+
 /**Initializes the given SPI peripheral
  * @param pHandle: The pointer to the handle structure
  */
@@ -148,13 +225,54 @@ uint8_t SPI_SendIT(SPI_Handle_t* pHandle, uint8_t* pTxBuffer, uint32_t len);
  */
 uint8_t SPI_ReceiveIT(SPI_Handle_t* pHandle, uint8_t* pRxBuffer, uint32_t len);
 
-
+/**Get the value of the specified flag
+ * @param pSPIx: The pointer to the SPIx peripheral
+ * @param flag: The flag to check
+ * @return SET if flag bit is 1, RESET otherwise.
+ */
 uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx , uint32_t flag);
+
+/**Closes the SPI transmission
+ * @param pHandle: The pointer to the handle
+ * @return none
+ */
+void SPI_CloseTransmisson(SPI_Handle_t *pHandle);
+
+/**Closes the SPI reception
+ * @param pHandle: The pointer to the handle
+ * @return none
+ */
+void SPI_CloseReception(SPI_Handle_t *pHandle);
+
+/**Clears OVR
+ * @param pSPIx: The pointer to SPIx peripheral
+ * @return none
+ */
+void SPI_ClearOVRFlag(SPI_RegDef_t *pSPIx)
+
+/**Sets SSI bit of the peripheral
+ * @param pSPIx: The pointer to SPIx peripheral
+ * @param isEnable: If ENABLE SS pin internally connected to ground.
+ * @return none
+ */
+void SPI_SetSSI(SPI_RegDef_t *pSPIx, uint8_t isEnable);
+
+/**Sets SSOE bit of the peripheral
+ * @param pSPIx: The pointer to SPIx peripheral
+ * @param isEnable: If ENABLE enables SS output
+ * @return none
+ */
+void SPI_SetSSOE(SPI_RegDef_t *pSPIx, uint8_t isEnable);
 
 /*
  * ISR handling
  */
 void SPI_HandleIRQ(SPI_Handle_t* pHandle);
 
+static void SPI_HandleTxInterrupt(SPI_Handle_t* pHandle);
+static void SPI_HandleRxInterrupt(SPI_Handle_t* pHandle);
+static void SPI_HandleOVRErrInterrupt(SPI_Handle_t* pHandle);
+
+void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t event);
 
 #endif /* SPI_H_ */
