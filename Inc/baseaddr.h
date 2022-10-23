@@ -55,6 +55,11 @@
 #define SPI2_BASE						(APB1PERIPH_BASE + 0x3800)
 #define SPI3_BASE						(APB1PERIPH_BASE + 0x3C00)
 
+/*Base addresses of I2C peripherals*/
+#define I2C1_BASE						(APB1PERIPH_BASE + 0x5400)
+#define I2C2_BASE						(APB1PERIPH_BASE + 0x5800)
+#define I2C3_BASE						(APB1PERIPH_BASE + 0x5C00)
+
 #define EXTI_BASE						(APB2PERIPH_BASE + 0x3C00)
 #define SYSCFG_BASE	        			(APB2PERIPH_BASE + 0x3800)
 #define NVIC_PR_BASE				 	((_vu32*)0xE000E400)
