@@ -1,13 +1,13 @@
 /*
  * i2c.c
  *
- *  Created on: 23 Eki 2022
+ *  Created on: 23 Oct 2022
  *      Author: Veli Ertunç
  */
 
 #include "i2c.h"
 
-void SetPeripheralClock(I2CRegDef_t *pI2Cx,uint8_t isEnable)
+void I2C_SetPeripheralClock(I2CRegDef_t *pI2Cx,uint8_t isEnable)
 {
 	if (isEnable) {
 		if(pI2Cx == I2C1)
@@ -38,5 +38,42 @@ void SetPeripheralClock(I2CRegDef_t *pI2Cx,uint8_t isEnable)
 		{
 			RCC->APB1ENR &= ~(1U << 23);
 		}
+	}
+}
+
+void I2C_Init(I2C_Handle_t *pHandle)
+{
+	uint32_t clkSpeed = pHandle->config.ClockSpeed;
+	uint8_t  devAddr = pHandle->config.DeviceAddress;
+	uint8_t  ackControl = pHandle->config.AckControl;
+	uint8_t  dutyCycle = pHandle->config.FMDutyCycle;
+
+	//1. Enable peripheral clock
+	I2C_SetPeripheralClock(pHandle->pI2Cx, ENABLE);
+	//2. Set ACK control bit
+	pHandle->pI2Cx->CR1 = (ackControl << 10);
+	//3.Configure FREQ field of CR2
+	uint32_t clk1=RCC_GetPCLK1Value()/1000000U;
+	pHandle->pI2Cx->CR2 = (clk1 & 0x3F);
+	//4. Set device address
+	pHandle->pI2Cx->OAR1 = (1U << 14) | (devAddr << 1);
+	//5. Configure CCR depending on mode
+	if (clkSpeed <= I2C_SCL_SPEED_SM) {
+		//Standard mode
+		uint32_t val = RCC_GetPCLK1Value()/(2*clkSpeed);
+		pI2CHandle->pI2Cx->CCR = val & 0xFFF;
+		//Set TRISE register
+		pHandle->pI2Cx->TRISE = (clk1+1) & 0x3F;
+	} else {
+		//Fast mode
+		uint32_t val = (1U << 15) | (dutyCycle << 14);
+		if (dutyCycle == I2C_FM_DUTY_2) {
+			val |= (RCC_GetPCLK1Value() / (3*clkSpeed) );
+		} else {
+			val |= (RCC_GetPCLK1Value() / (25*clkSpeed) );
+		}
+		pHandle->pI2Cx->CCR = val&0xFFF;
+		//Set TRISE register
+		pHandle->pI2Cx->TRISE = (clk1*3/10+1) & 0x3F;
 	}
 }
