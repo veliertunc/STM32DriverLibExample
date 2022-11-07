@@ -41,6 +41,34 @@ void I2C_SetPeripheralClock(I2CRegDef_t *pI2Cx,uint8_t isEnable)
 	}
 }
 
+uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx , uint32_t flag)
+{
+	return (pI2Cx->SR1 & flag)? FLAG_SET:FLAG_RESET;
+}
+
+void I2C_SetAcking(I2C_RegDef_t *pI2Cx, uint8_t isEnable)
+{
+	if(isEnable)
+	{
+		//enable the ack
+		pI2Cx->CR1 |= ( 1U << I2C_CR1_ACK);
+	}else
+	{
+		//disable the ack
+		pI2Cx->CR1 &= ~( 1U << I2C_CR1_ACK);
+	}
+}
+
+void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx)
+{
+	pI2Cx->CR1 |= ( 1U << I2C_CR1_START);
+}
+
+void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx)
+{
+	pI2Cx->CR1 |= ( 1U << I2C_CR1_STOP);
+}
+
 void I2C_Init(I2C_Handle_t *pHandle)
 {
 	uint32_t clkSpeed = pHandle->config.ClockSpeed;

@@ -181,6 +181,11 @@ typedef struct
 #define I2C_EV_DATA_RCV         9
 
 void I2C_SetPeripheralClock(I2CRegDef_t *pI2Cx,uint8_t isEnable);
+uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx , uint32_t flag);
+void I2C_SetAcking(I2C_RegDef_t *pI2Cx, uint8_t isEnable);
+void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
+void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
+
 
 void I2C_Init(I2C_Handle_t *pHandle);
 
