@@ -185,7 +185,9 @@ uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx , uint32_t flag);
 void I2C_SetAcking(I2C_RegDef_t *pI2Cx, uint8_t isEnable);
 void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
 void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
-
+void I2C_AddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t slaveAddr);
+void I2C_AddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t slaveAddr);
+void I2C_ClearADDRFlag(I2C_Handle_t *pHandle);
 
 void I2C_Init(I2C_Handle_t *pHandle);
 

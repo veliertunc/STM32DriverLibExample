@@ -105,3 +105,39 @@ void I2C_Init(I2C_Handle_t *pHandle)
 		pHandle->pI2Cx->TRISE = (clk1*3/10+1) & 0x3F;
 	}
 }
+
+void I2C_AddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t slaveAddr)
+{
+	slaveAddr = slaveAddr << 1;
+	slaveAddr &= ~(1); //slaveAddr is Slave address + r/nw bit=0
+	pI2Cx->DR = slaveAddr;
+}
+
+void I2C_AddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t slaveAddr)
+{
+	slaveAddr = slaveAddr << 1;
+	slaveAddr |= 1; //slaveAddr is Slave address + r/nw bit=1
+	pI2Cx->DR = slaveAddr;
+}
+
+void I2C_ClearADDRFlag(I2C_Handle_t *pHandle)
+{
+	uint32_t dummy_read;
+	//check for device mode
+	if(pHandle->pI2Cx->SR2 & (1 << I2C_SR2_MSL))
+	{
+		//device is in master mode
+		if(pHandle->TxRxState == I2C_BUSY_IN_RX)
+		{
+			if(pHandle->RxSize  == 1)
+			{
+				//first disable the ack
+				I2C_SetAcking(pHandle->pI2Cx,DISABLE);
+			}
+		}
+	}
+	//clear the ADDR flag ( read SR1 , read SR2)
+	dummy_read = pHandle->pI2Cx->SR1;
+	dummy_read = pHandle->pI2Cx->SR2;
+	(void)dummy_read;
+}
