@@ -64,5 +64,15 @@
 #define SYSCFG_BASE	        			(APB2PERIPH_BASE + 0x3800)
 #define NVIC_PR_BASE				 	((_vu32*)0xE000E400)
 
+/*Base addresses of UART and USART*/
+#define USART2_BASE						(APB1PERIPH_BASE + 0x4400)
+#define USART3_BASE						(APB1PERIPH_BASE + 0x4800)
+#define UART4_BASE						(APB1PERIPH_BASE + 0x4C00)
+#define UART5_BASE						(APB1PERIPH_BASE + 0x5000)
+
+#define USART1_BASE						(APB2PERIPH_BASE + 0x1000)
+#define USART6_BASE						(APB2PERIPH_BASE + 0x1400)
+
+
 
 #endif /* BASEADDR_H_ */
