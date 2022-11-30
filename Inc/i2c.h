@@ -190,6 +190,25 @@ void I2C_AddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t slaveAddr);
 void I2C_ClearADDRFlag(I2C_Handle_t *pHandle);
 
 void I2C_Init(I2C_Handle_t *pHandle);
+void I2C_MasterSend(I2C_Handle_t *pHandle,uint8_t *pTxBuffer, uint32_t len, uint8_t slaveAddr,uint8_t sr);
+void I2C_MasterReceive(I2C_Handle_t *pHandle,uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr,uint8_t sr);
+uint8_t I2C_MasterSendIT(I2C_Handle_t *pHandle,uint8_t *pTxbuffer, uint32_t len, uint8_t slaveAddr,uint8_t sr);
+uint8_t I2C_MasterReceiveIT(I2C_Handle_t *pHandle,uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr,uint8_t sr);
+
+void I2C_CloseReceiveData(I2C_Handle_t *pHandle);
+void I2C_CloseSendData(I2C_Handle_t *pHandle);
+
+void I2C_SlaveSend(I2C_RegDef_t *pI2Cx,uint8_t data);
+uint8_t I2C_SlaveReceive(I2C_RegDef_t *pI2Cx);
 
 
+void I2C_HandleIRQ_EV(I2C_Handle_t *pHandle);
+void I2C_HandleIRQ_ER(I2C_Handle_t *pHandle);
+
+void I2C_MasterHandleTXEInterrupt(I2C_Handle_t *pHandle);
+void I2C_MasterHandleRXNEInterrupt(I2C_Handle_t *pHandle);
+
+void I2C_SlaveSetCallbackEvents(I2C_RegDef_t *pI2Cx,uint8_t isEnable);
+
+void I2C_AppEventCallback(I2C_Handle_t *pHandle,uint8_t evt);
 #endif /* I2C_H_ */
